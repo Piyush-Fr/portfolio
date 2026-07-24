@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #000000;
+  --color-background: #0a0a0a;
   --color-foreground: #ededed;
   --color-brand-red: #e60000;
   --color-grid-line: #333333;
@@ -11,13 +11,33 @@
 }
 
 body {
-  background: var(--color-background);
-  color: var(--color-foreground);
+  background: var(--dynamic-bg, var(--color-background));
+  color: var(--dynamic-fg, var(--color-foreground));
   font-family: var(--font-sans);
+  transition: background-color 0.05s linear, color 0.05s linear;
 }
 
+/* All borders and grid lines respond to the dynamic color */
+.border-grid-line {
+  border-color: var(--dynamic-grid, var(--color-grid-line)) !important;
+}
+
+/* Accent/brand color responds to dynamic color */
+.text-brand-red {
+  color: var(--dynamic-accent, var(--color-brand-red)) !important;
+}
+.border-brand-red {
+  border-color: var(--dynamic-accent, var(--color-brand-red)) !important;
+}
+
+/* Hide cursor on desktop — custom cursor replaces it */
 @media (min-width: 768px) {
-  body, a, button {
+  * {
     cursor: none !important;
   }
+}
+
+/* Smooth scroll offset for anchor targets */
+[id] {
+  scroll-margin-top: 2rem;
 }

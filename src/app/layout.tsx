@@ -3,6 +3,7 @@ import { Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
+import ScrollColorManager from "@/components/ScrollColorManager";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,8 +32,9 @@ export default function RootLayout({
       className={`${inter.variable} ${spaceMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         <SmoothScroll>
+          <ScrollColorManager />
           <CustomCursor />
           {children}
         </SmoothScroll>

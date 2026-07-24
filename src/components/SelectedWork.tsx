@@ -1,85 +1,115 @@
+"use client";
+
+import { useState } from "react";
 import Section from "./Section";
+import RevealText from "./RevealText";
 
 const works = [
   {
-    title: "GrindFlow – AI Study Companion",
+    title: "GrindFlow",
     year: "2026",
-    tags: "Flutter, RAG, Gemini AI, Supabase",
-    desc: "Cross-platform AI study companion with a native PDF reader, implementing a full RAG pipeline and dynamic summarization."
+    tags: "Flutter · RAG · Gemini AI · Supabase",
+    type: "AI STUDY COMPANION",
+    desc: "Cross-platform AI study companion with native PDF reader, full RAG pipeline, and dynamic summarization."
   },
   {
-    title: "ML Automotive Pricing Engine",
+    title: "ML Pricing Engine",
     year: "2026",
-    tags: "Python, scikit-learn, Random Forest",
-    desc: "End-to-end ML pipeline for VW and Audi vehicles, engineering critical features dropping MAE by 75%."
+    tags: "Python · scikit-learn · Random Forest",
+    type: "MACHINE LEARNING",
+    desc: "End-to-end ML pipeline for automotive pricing, engineering features that dropped MAE by 75%."
   },
   {
     title: "ProoV",
     year: "2026",
-    tags: "Feature Engineering, Data Science",
-    desc: "Engineered predictive features to optimize data quality and translated model performance into actionable financial impacts."
+    tags: "Feature Engineering · Data Science",
+    type: "DATA SCIENCE",
+    desc: "Predictive feature engineering and model evaluation for CPO team financial impact analysis."
   },
   {
-    title: "Smart India Hackathon (SIH)",
+    title: "Smart India Hackathon",
     year: "2025",
-    tags: "Flutter, Firebase, Google Maps",
-    desc: "Cross-platform application featuring a responsive UI and intelligent AI chatbot assistance."
+    tags: "Flutter · Firebase · Google Maps",
+    type: "NATIONAL HACKATHON",
+    desc: "Cross-platform Flutter application with intelligent AI chatbot and Firebase backend."
   },
   {
     title: "Criv Media",
     year: "2025",
-    tags: "UI/UX, Framer, Web Dev",
-    desc: "Delivered user-centric UI/UX designs and high-conversion responsive websites."
+    tags: "UI/UX · Framer · Web Dev",
+    type: "DESIGN STUDIO",
+    desc: "User-centric UI/UX designs and high-conversion responsive websites using Framer."
   },
   {
-    title: "Sikkim Tourism App",
+    title: "Sikkim Tourism",
     year: "2025",
-    tags: "Flutter, Firebase",
-    desc: "Tourism application integrating Google Maps SDK and an in-app conversational AI chatbot."
+    tags: "Flutter · Firebase · AI Chatbot",
+    type: "TOURISM APP",
+    desc: "Tourism application with Google Maps SDK and in-app conversational AI chatbot."
   }
 ];
 
 export default function SelectedWork() {
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+
   return (
     <Section
       id="work"
       index="02"
       title="Selected Work"
-      className="bg-brand-red"
-      borderColor="border-black/30"
-      textColor="text-black"
-      brandColor="text-black font-bold"
-      mutedColor="text-black/60"
       rightContent={
-        <div className="font-mono text-xs text-black/60">
-          PROJECTS &<br />
-          EXPERIENCE
+        <div className="flex flex-col h-full">
+          <div className="font-mono text-xs uppercase tracking-widest mb-8 text-brand-red">
+            {activeIdx !== null ? "ACTIVE" : "RESOLVED"}{" "}
+            <span className="font-bold">
+              {activeIdx !== null ? `0${activeIdx + 1}` : `0${works.length}`} / 0{works.length}
+            </span>
+          </div>
+
+          {/* Detail panel */}
+          <div className={`transition-all duration-300 ${activeIdx !== null ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+            {activeIdx !== null && (
+              <>
+                <p className="text-sm opacity-80 mb-4 font-sans leading-relaxed">
+                  {works[activeIdx].desc}
+                </p>
+                <span className="font-mono text-xs uppercase tracking-widest text-brand-red">
+                  {works[activeIdx].tags}
+                </span>
+              </>
+            )}
+          </div>
         </div>
       }
     >
-      <div className="flex flex-col w-full text-black">
-        {works.map((work, idx) => (
-          <div 
-            key={idx} 
-            className="group py-8 border-b border-black/30 last:border-0 cursor-pointer flex flex-col transition-all"
-          >
-            <div className="flex flex-col md:flex-row justify-between md:items-baseline mb-2">
-              <h3 className="text-2xl md:text-3xl font-bold group-hover:translate-x-2 transition-all duration-300">
+      <div className="flex flex-col justify-center min-h-[60vh]">
+        <RevealText as="h2" className="text-3xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-16">
+          Selected work,<br />
+          shaped as systems.
+        </RevealText>
+
+        <div className="flex flex-col w-full">
+          {works.map((work, idx) => (
+            <div
+              key={idx}
+              onMouseEnter={() => setActiveIdx(idx)}
+              onMouseLeave={() => setActiveIdx(null)}
+              className="group py-5 md:py-6 border-b border-grid-line last:border-0 cursor-pointer flex items-center justify-between gap-4"
+            >
+              <h3 className={`text-3xl md:text-5xl lg:text-6xl font-bold transition-all duration-400 ease-out ${activeIdx === idx ? 'translate-x-4' : ''} ${activeIdx !== null && activeIdx !== idx ? 'opacity-30' : 'opacity-100'}`}>
                 {work.title}
               </h3>
-              <span className="font-mono text-sm text-black/60 group-hover:text-black transition-colors mt-2 md:mt-0">
-                {work.year}
-              </span>
-            </div>
-            
-            <div className="text-black/80 max-w-xl h-0 opacity-0 overflow-hidden group-hover:h-auto group-hover:opacity-100 group-hover:mt-4 transition-all duration-300">
-              <p className="mb-4">{work.desc}</p>
-              <div className="font-mono text-xs font-bold tracking-wider uppercase text-black">
-                {work.tags}
+              <div className="flex items-center gap-4 shrink-0">
+                <span className="font-mono text-xs border border-grid-line px-2 py-1 rounded opacity-70">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <span className="font-mono text-xs uppercase tracking-wider opacity-60 hidden lg:block">
+                  {work.type}
+                </span>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </Section>
   );

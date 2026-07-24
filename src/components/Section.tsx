@@ -1,4 +1,14 @@
+"use client";
+
 import React from 'react';
+
+interface ColorBlockSectionProps {
+  id?: string;
+  index: string;
+  title: string;
+  children: React.ReactNode;
+  rightContent?: React.ReactNode;
+}
 
 export default function Section({
   id,
@@ -6,42 +16,42 @@ export default function Section({
   title,
   children,
   rightContent,
-  className = "",
-  borderColor = "border-grid-line",
-  textColor = "text-foreground",
-  brandColor = "text-brand-red",
-  mutedColor = "text-gray-500",
-}: {
-  id?: string;
-  index: string;
-  title: string;
-  children: React.ReactNode;
-  rightContent?: React.ReactNode;
-  className?: string;
-  borderColor?: string;
-  textColor?: string;
-  brandColor?: string;
-  mutedColor?: string;
-}) {
+}: ColorBlockSectionProps) {
   return (
-    <section id={id} className={`grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 border-b ${borderColor} w-full scroll-mt-20 ${className} transition-colors duration-500`}>
-      {/* Left Column: Index */}
-      <div className={`md:col-span-1 border-r ${borderColor} p-6 hidden md:block transition-colors duration-500`}>
-        <span className={`font-mono text-sm ${brandColor} transition-colors duration-500`}>{index} / {title}</span>
-      </div>
-
-      {/* Middle Column: Main Content */}
-      <div className={`md:col-span-2 lg:col-span-3 p-6 md:p-12 lg:p-24 border-r ${borderColor} flex flex-col justify-center ${textColor} transition-colors duration-500`}>
-        {/* Mobile Header */}
-        <div className="md:hidden mb-8">
-          <span className={`font-mono text-sm ${brandColor} transition-colors duration-500`}>{index} / {title}</span>
+    <section
+      id={id}
+      className="relative"
+    >
+      {/* Grid Container */}
+      <div className="grid grid-cols-1 md:grid-cols-[220px_1fr_280px] lg:grid-cols-[260px_1fr_320px] min-h-screen">
+        
+        {/* Left Column — Sticky Section Label */}
+        <div className="hidden md:block border-r border-grid-line relative">
+          <div className="sticky top-0 p-6 pt-8">
+            <span className="font-mono text-sm text-brand-red uppercase tracking-widest">
+              {index} / {title}
+            </span>
+          </div>
         </div>
-        {children}
-      </div>
 
-      {/* Right Column: Supplementary */}
-      <div className={`md:col-span-1 p-6 flex-col justify-between hidden md:flex ${mutedColor} transition-colors duration-500`}>
-        {rightContent}
+        {/* Middle Column — Main Content */}
+        <div className="border-r border-grid-line p-6 md:p-12 lg:px-20 lg:py-16">
+          {/* Mobile Section Label */}
+          <div className="md:hidden mb-8">
+            <span className="font-mono text-sm text-brand-red uppercase tracking-widest">
+              {index} / {title}
+            </span>
+          </div>
+          {children}
+        </div>
+
+        {/* Right Column — Supplementary */}
+        <div className="hidden md:block relative">
+          <div className="sticky top-0 p-6 pt-8">
+            {rightContent}
+          </div>
+        </div>
+
       </div>
     </section>
   );
