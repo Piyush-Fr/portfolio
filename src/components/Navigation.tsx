@@ -18,6 +18,8 @@ export default function Navigation() {
       {/* Transparent Floating Menu Button on Top Right */}
       <button 
         onClick={() => setIsOpen(true)}
+        aria-label="Open navigation menu"
+        aria-expanded={isOpen}
         className="fixed top-6 right-6 z-[80] font-mono text-sm uppercase tracking-widest text-brand-red hover:opacity-70 transition-opacity bg-transparent px-2 py-1"
       >
         [ Menu ]
@@ -27,12 +29,16 @@ export default function Navigation() {
       {isOpen && (
         <div 
           onClick={() => setIsOpen(false)}
+          aria-hidden="true"
           className="fixed inset-0 bg-black/60 backdrop-blur-xs z-[90] transition-opacity duration-300"
         />
       )}
 
       {/* Right-side Drawer Menu */}
       <div 
+        role="dialog"
+        aria-modal="true"
+        aria-label="Navigation drawer"
         className={`fixed top-0 right-0 bottom-0 w-full sm:w-[480px] md:w-[540px] bg-black text-white z-[100] flex flex-col border-l border-grid-line transition-transform duration-500 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
@@ -44,6 +50,7 @@ export default function Navigation() {
           </div>
           <button 
             onClick={() => setIsOpen(false)}
+            aria-label="Close navigation menu"
             className="font-mono text-xs uppercase tracking-widest text-gray-400 hover:text-brand-red transition-colors flex items-center gap-1"
           >
             [ Close ✕ ]
