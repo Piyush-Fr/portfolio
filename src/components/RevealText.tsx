@@ -7,7 +7,7 @@ interface RevealTextProps {
   children: React.ReactNode;
   delay?: number;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType | string;
 }
 
 export default function RevealText({ children, delay = 0, className = "", as = "div" }: RevealTextProps) {
