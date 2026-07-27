@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Section from "./Section";
 import RevealText from "./RevealText";
 
@@ -53,6 +54,13 @@ export default function SelectedWork() {
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [expandedMobileIdx, setExpandedMobileIdx] = useState<number | null>(null);
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+  const dragonY = useTransform(scrollYProgress, [0, 1], ["10%", "-20%"]);
+
   const toggleMobileExpand = (idx: number) => {
     setExpandedMobileIdx(prev => prev === idx ? null : idx);
   };
@@ -87,52 +95,68 @@ export default function SelectedWork() {
         </div>
       }
     >
-      <div className="flex flex-col justify-center min-h-[60vh]">
-        <RevealText as="h2" className="text-3xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-16">
-          Selected work,<br />
-          shaped as systems.
-        </RevealText>
+      <div ref={containerRef} className="relative flex flex-col justify-center min-h-[60vh]">
 
-        <div className="flex flex-col w-full">
-          {works.map((work, idx) => (
-            <div
-              key={idx}
-              data-cursor="exp"
-              onMouseEnter={() => setActiveIdx(idx)}
-              onMouseLeave={() => setActiveIdx(null)}
-              onClick={() => toggleMobileExpand(idx)}
-              className="group py-5 md:py-6 border-b border-grid-line last:border-0 cursor-pointer flex flex-col justify-center"
-            >
-              <div className="flex items-center justify-between gap-4 w-full">
-                <h3 className={`text-3xl md:text-5xl lg:text-6xl font-bold transition-all duration-400 ease-out ${activeIdx === idx ? 'translate-x-4' : ''} ${activeIdx !== null && activeIdx !== idx ? 'opacity-30' : 'opacity-100'}`}>
-                  {work.title}
-                </h3>
-                <div className="flex items-center gap-4 shrink-0">
-                  <span className="font-mono text-xs border border-grid-line px-2 py-1 rounded opacity-70">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <span className="font-mono text-xs uppercase tracking-wider opacity-60 hidden lg:block">
-                    {work.type}
+        {/* Dithered Dragon — parallax layer behind the work list */}
+        <div className="absolute inset-0 flex items-end justify-end pointer-events-none select-none z-0 overflow-hidden">
+          <motion.img
+            src="/dragon.png"
+            alt=""
+            aria-hidden="true"
+            style={{ y: dragonY }}
+            className="w-[500px] h-[500px] md:w-[640px] md:h-[640px] lg:w-[780px] lg:h-[780px] object-contain opacity-30 will-change-transform"
+          />
+        </div>
+
+        {/* Foreground content */}
+        <div className="relative z-10">
+          <RevealText as="h2" className="text-3xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-16">
+            Selected work,<br />
+            shaped as systems.
+          </RevealText>
+
+          <div className="flex flex-col w-full">
+            {works.map((work, idx) => (
+              <div
+                key={idx}
+                data-cursor="exp"
+                onMouseEnter={() => setActiveIdx(idx)}
+                onMouseLeave={() => setActiveIdx(null)}
+                onClick={() => toggleMobileExpand(idx)}
+                className="group py-5 md:py-6 border-b border-grid-line last:border-0 cursor-pointer flex flex-col justify-center"
+              >
+                <div className="flex items-center justify-between gap-4 w-full">
+                  <h3 className={`text-3xl md:text-5xl lg:text-6xl font-bold transition-all duration-400 ease-out ${activeIdx === idx ? 'translate-x-4' : ''} ${activeIdx !== null && activeIdx !== idx ? 'opacity-30' : 'opacity-100'}`}>
+                    {work.title}
+                  </h3>
+                  <div className="flex items-center gap-4 shrink-0">
+                    <span className="font-mono text-xs border border-grid-line px-2 py-1 rounded opacity-70">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <span className="font-mono text-xs uppercase tracking-wider opacity-60 hidden lg:block">
+                      {work.type}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Strict Mobile-Only Inline Expand under the heading (md:hidden) */}
+                <div 
+                  className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${
+                    expandedMobileIdx === idx ? 'max-h-60 opacity-100 mt-4 pt-3 border-t border-grid-line/40' : 'max-h-0 opacity-0'
+                  }`}
+                >
+                  <p className="text-sm opacity-90 leading-relaxed font-sans mb-3">
+                    {work.desc}
+                  </p>
+                  <span className="font-mono text-xs uppercase tracking-widest text-brand-red font-bold">
+                    {work.tags}
                   </span>
                 </div>
               </div>
-
-              {/* Strict Mobile-Only Inline Expand under the heading (md:hidden) */}
-              <div 
-                className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${
-                  expandedMobileIdx === idx ? 'max-h-60 opacity-100 mt-4 pt-3 border-t border-grid-line/40' : 'max-h-0 opacity-0'
-                }`}
-              >
-                <p className="text-sm opacity-90 leading-relaxed font-sans mb-3">
-                  {work.desc}
-                </p>
-                <span className="font-mono text-xs uppercase tracking-widest text-brand-red font-bold">
-                  {work.tags}
-                </span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+
       </div>
     </Section>
   );

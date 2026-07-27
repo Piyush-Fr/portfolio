@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Section from "./Section";
 import RevealText from "./RevealText";
 
@@ -14,7 +15,7 @@ interface SkillItem {
 const leftSkills: SkillItem[] = [
   { title: "Python & ML", num: "01", category: "Languages & Frameworks", desc: "scikit-learn, Pandas, NumPy — end-to-end machine learning pipelines from data preprocessing to model evaluation." },
   { title: "Flutter & Mobile", num: "02", category: "Languages & Frameworks", desc: "Cross-platform mobile apps using Flutter with BLoC, Provider, and Riverpod state management architecture." },
-  { title: "RAG & LLM Integration", num: "03", category: "Languages & Frameworks", desc: "Gemini API, document chunking, text embeddings, and vector retrieval pipelines for intelligent assistants." },
+  { title: "LLM Integration", num: "03", category: "Languages & Frameworks", desc: "Gemini API, document chunking, text embeddings, and vector retrieval pipelines for intelligent assistants." },
 ];
 
 const rightSkills: SkillItem[] = [
@@ -25,6 +26,13 @@ const rightSkills: SkillItem[] = [
 
 export default function Practice() {
   const [expandedMobileSkill, setExpandedMobileSkill] = useState<string | null>(null);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+  const sisyY = useTransform(scrollYProgress, [0, 1], ["10%", "-20%"]);
 
   const toggleMobileSkill = (num: string) => {
     setExpandedMobileSkill(prev => prev === num ? null : num);
@@ -42,7 +50,19 @@ export default function Practice() {
         </div>
       }
     >
-      <div className="flex flex-col justify-center min-h-[60vh]">
+      <div ref={containerRef} className="relative flex flex-col justify-center min-h-[60vh]">
+        {/* Dithered Sisyphus — parallax layer behind the skills grid */}
+        <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none z-0 overflow-hidden">
+          <motion.img
+            src="/sisy.png"
+            alt=""
+            aria-hidden="true"
+            style={{ y: sisyY }}
+            className="w-[500px] h-[500px] md:w-[640px] md:h-[640px] lg:w-[780px] lg:h-[780px] object-contain opacity-20 will-change-transform"
+          />
+        </div>
+
+        <div className="relative z-10">
         <RevealText as="h2" className="text-3xl md:text-5xl lg:text-6xl font-bold leading-[1.1] mb-16">
           Surface is what<br />
           people see. System is<br />
@@ -135,6 +155,7 @@ export default function Practice() {
               </p>
             </div>
           </RevealText>
+        </div>
         </div>
       </div>
     </Section>

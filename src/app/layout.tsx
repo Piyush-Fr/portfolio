@@ -17,7 +17,7 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio | System Design",
+  title: "Piyush Thakur",
   description: "Product interfaces and web systems",
 };
 
