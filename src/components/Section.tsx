@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import SectionScrollLine from './SectionScrollLine';
 
 interface ColorBlockSectionProps {
   id?: string;
@@ -35,7 +36,7 @@ export default function Section({
         </div>
 
         {/* Middle Column — Main Content */}
-        <div className="border-r border-grid-line p-6 md:p-12 lg:px-20 lg:py-16">
+        <div className="border-r border-grid-line p-6 md:p-12 lg:px-20 lg:py-16 relative">
           {/* Mobile Section Label */}
           <div className="md:hidden mb-8">
             <span className="font-mono text-sm text-brand-red uppercase tracking-widest">
@@ -43,6 +44,9 @@ export default function Section({
             </span>
           </div>
           {children}
+
+          {/* Dynamic Scroll Indicator Line between Middle Column and Right Column */}
+          <SectionScrollLine />
         </div>
 
         {/* Right Column — Supplementary */}

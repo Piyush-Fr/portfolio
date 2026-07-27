@@ -29,6 +29,9 @@ body {
 .border-brand-red {
   border-color: var(--dynamic-accent, var(--color-brand-red)) !important;
 }
+.bg-brand-red {
+  background-color: var(--dynamic-accent, var(--color-brand-red)) !important;
+}
 
 /* Hide cursor on desktop — custom cursor replaces it */
 @media (min-width: 768px) {
