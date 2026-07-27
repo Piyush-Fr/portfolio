@@ -50,10 +50,10 @@ export default function Contact() {
                 <a href="mailto:thakurpiyush3112005@gmail.com" className="block text-base md:text-lg hover:text-brand-red transition-colors mb-3 break-words">
                   thakurpiyush3112005@gmail.com
                 </a>
-                <a href="#" className="block text-base md:text-lg hover:text-brand-red transition-colors mb-3">
+                <a href="https://www.linkedin.com/in/piyushthakur01" target="_blank" rel="noopener noreferrer" className="block text-base md:text-lg hover:text-brand-red transition-colors mb-3">
                   LinkedIn
                 </a>
-                <a href="#" className="block text-base md:text-lg hover:text-brand-red transition-colors">
+                <a href="https://github.com/Piyush-Fr" target="_blank" rel="noopener noreferrer" className="block text-base md:text-lg hover:text-brand-red transition-colors">
                   GitHub
                 </a>
               </div>
