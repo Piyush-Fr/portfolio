@@ -27,13 +27,7 @@ const works = [
     type: "DATA SCIENCE",
     desc: "Predictive feature engineering and model evaluation for CPO team financial impact analysis."
   },
-  {
-    title: "Smart India Hackathon",
-    year: "2025",
-    tags: "Flutter · Firebase · Google Maps",
-    type: "NATIONAL HACKATHON",
-    desc: "Cross-platform Flutter application with intelligent AI chatbot and Firebase backend."
-  },
+
   {
     title: "Criv Media",
     year: "2025",
