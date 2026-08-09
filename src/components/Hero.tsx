@@ -1,19 +1,31 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Section from "./Section";
 import RevealText from "./RevealText";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const parallaxImgRef = useRef<HTMLImageElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
+  useGSAP(() => {
+    // Aggressive parallax effect
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top top",
+      end: "bottom top",
+      scrub: 1, // Smooth interpolation
+      animation: gsap.to(parallaxImgRef.current, {
+        yPercent: -50, // Intense travel distance
+        ease: "none"
+      })
+    });
+  }, { scope: containerRef });
 
   return (
     <Section
@@ -37,11 +49,12 @@ export default function Hero() {
 
         {/* Desktop only — absolute parallax behind headline */}
         <div className="hidden md:flex absolute inset-0 items-center justify-end pointer-events-none select-none z-0">
-          <motion.img
+          <img
+            ref={parallaxImgRef}
             src="/pfp.png"
             alt=""
             aria-hidden="true"
-            style={{ y, mixBlendMode: "luminosity" }}
+            style={{ mixBlendMode: "luminosity" }}
             className="w-[460px] h-[460px] lg:w-[540px] lg:h-[540px] object-contain opacity-30 will-change-transform"
           />
         </div>

@@ -1,9 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Section from "./Section";
 import RevealText from "./RevealText";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface SkillItem {
   title: string;
@@ -28,11 +32,20 @@ export default function Practice() {
   const [expandedMobileSkill, setExpandedMobileSkill] = useState<string | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-  const sisyY = useTransform(scrollYProgress, [0, 1], ["10%", "-20%"]);
+  const sisyRef = useRef<HTMLImageElement>(null);
+
+  useGSAP(() => {
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1.5,
+      animation: gsap.fromTo(sisyRef.current,
+        { yPercent: 15 },
+        { yPercent: -35, ease: "none" }
+      )
+    });
+  }, { scope: containerRef });
 
   const toggleMobileSkill = (num: string) => {
     setExpandedMobileSkill(prev => prev === num ? null : num);
@@ -53,11 +66,11 @@ export default function Practice() {
       <div ref={containerRef} className="relative flex flex-col justify-center min-h-[60vh]">
         {/* Dithered Sisyphus — parallax layer behind the skills grid */}
         <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none z-0 overflow-hidden">
-          <motion.img
+          <img
+            ref={sisyRef}
             src="/sisy.png"
             alt=""
             aria-hidden="true"
-            style={{ y: sisyY }}
             className="w-[500px] h-[500px] md:w-[640px] md:h-[640px] lg:w-[780px] lg:h-[780px] object-contain opacity-20 will-change-transform"
           />
         </div>

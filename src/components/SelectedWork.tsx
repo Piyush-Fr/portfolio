@@ -1,24 +1,35 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Section from "./Section";
 import RevealText from "./RevealText";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const works = [
+  {
+    title: "Nihon Urbanization",
+    year: "2026",
+    tags: "Scikit-Learn · FastAPI · Next.js · Spatial ML",
+    type: "MACHINE LEARNING",
+    desc: "End-to-end spatial machine learning pipeline predicting prefecture-level population change in Japan, deployed as an interactive dashboard."
+  },
+  {
+    title: "MONOVALUATION",
+    year: "2026",
+    tags: "Python · scikit-learn · Random Forest",
+    type: "MACHINE LEARNING",
+    desc: "End-to-end ML pipeline for automotive pricing, engineering features that dropped MAE by 75%."
+  },
   {
     title: "GrindFlow",
     year: "2026",
     tags: "Flutter · RAG · Gemini AI · Supabase",
     type: "AI STUDY COMPANION",
     desc: "Cross-platform AI study companion with native PDF reader, full RAG pipeline, and dynamic summarization."
-  },
-  {
-    title: "ML Pricing Engine",
-    year: "2026",
-    tags: "Python · scikit-learn · Random Forest",
-    type: "MACHINE LEARNING",
-    desc: "End-to-end ML pipeline for automotive pricing, engineering features that dropped MAE by 75%."
   },
   {
     title: "ProoV",
@@ -49,11 +60,21 @@ export default function SelectedWork() {
   const [expandedMobileIdx, setExpandedMobileIdx] = useState<number | null>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-  const dragonY = useTransform(scrollYProgress, [0, 1], ["10%", "-20%"]);
+  const dragonRef = useRef<HTMLImageElement>(null);
+
+  useGSAP(() => {
+    // Dynamic dragon parallax
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1.5, // Even smoother scrub for the large background element
+      animation: gsap.fromTo(dragonRef.current, 
+        { yPercent: 15 },
+        { yPercent: -35, ease: "none" }
+      )
+    });
+  }, { scope: containerRef });
 
   const toggleMobileExpand = (idx: number) => {
     setExpandedMobileIdx(prev => prev === idx ? null : idx);
@@ -93,11 +114,11 @@ export default function SelectedWork() {
 
         {/* Dithered Dragon — parallax layer behind the work list */}
         <div className="absolute inset-0 flex items-end justify-end pointer-events-none select-none z-0 overflow-hidden">
-          <motion.img
+          <img
+            ref={dragonRef}
             src="/dragon.png"
             alt=""
             aria-hidden="true"
-            style={{ y: dragonY }}
             className="w-[500px] h-[500px] md:w-[640px] md:h-[640px] lg:w-[780px] lg:h-[780px] object-contain opacity-30 will-change-transform"
           />
         </div>

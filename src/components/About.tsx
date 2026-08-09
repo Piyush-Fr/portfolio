@@ -1,17 +1,30 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Section from "./Section";
 import RevealText from "./RevealText";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function About() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-  const castleY = useTransform(scrollYProgress, [0, 1], ["10%", "-20%"]);
+  const castleRef = useRef<HTMLImageElement>(null);
+
+  useGSAP(() => {
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1.5,
+      animation: gsap.fromTo(castleRef.current,
+        { yPercent: 15 },
+        { yPercent: -35, ease: "none" }
+      )
+    });
+  }, { scope: containerRef });
 
   return (
     <Section
@@ -29,11 +42,11 @@ export default function About() {
 
         {/* Dithered Castle — parallax layer behind education content */}
         <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none z-0 overflow-hidden">
-          <motion.img
+          <img
+            ref={castleRef}
             src="/castle.png"
             alt=""
             aria-hidden="true"
-            style={{ y: castleY }}
             className="w-[500px] h-[500px] md:w-[640px] md:h-[640px] lg:w-[780px] lg:h-[780px] object-contain opacity-20 will-change-transform"
           />
         </div>
@@ -58,17 +71,6 @@ export default function About() {
               </div>
             </RevealText>
 
-            <RevealText delay={0.2}>
-              <div className="py-6 border-b border-grid-line flex flex-col md:flex-row justify-between md:items-baseline gap-2">
-                <div>
-                  <h3 className="text-2xl md:text-3xl font-bold">Arunodaya Public School</h3>
-                  <p className="text-sm text-gray-400 mt-1 font-mono">Senior Secondary & High School Education</p>
-                </div>
-                <div className="font-mono text-sm text-brand-red shrink-0">
-                  12th: 74.5% | 10th: 75%
-                </div>
-              </div>
-            </RevealText>
 
             <RevealText delay={0.3}>
               <div className="mt-8 p-6 border border-grid-line bg-zinc-950/50">

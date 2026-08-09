@@ -1,17 +1,30 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Section from "./Section";
 import RevealText from "./RevealText";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function Contact() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-  const eyeY = useTransform(scrollYProgress, [0, 1], ["10%", "-20%"]);
+  const eyeRef = useRef<HTMLImageElement>(null);
+
+  useGSAP(() => {
+    ScrollTrigger.create({
+      trigger: containerRef.current,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1.5,
+      animation: gsap.fromTo(eyeRef.current,
+        { yPercent: 15 },
+        { yPercent: -35, ease: "none" }
+      )
+    });
+  }, { scope: containerRef });
 
   return (
     <Section
@@ -28,11 +41,11 @@ export default function Contact() {
 
         {/* Dithered Black Eye — parallax layer behind contact content */}
         <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none z-0 overflow-hidden">
-          <motion.img
+          <img
+            ref={eyeRef}
             src="/blckeye.png"
             alt=""
             aria-hidden="true"
-            style={{ y: eyeY }}
             className="w-[501px] h-[501px] md:w-[641px] md:h-[641px] lg:w-[781px] lg:h-[781px] object-contain opacity-20 will-change-transform"
           />
         </div>
