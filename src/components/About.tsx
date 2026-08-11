@@ -41,7 +41,7 @@ export default function About() {
       <div ref={containerRef} className="relative flex flex-col justify-center min-h-[50vh]">
 
         {/* Dithered Castle — parallax layer behind education content */}
-        <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none z-0 overflow-hidden">
+        <div className="absolute inset-0 flex items-center justify-end pointer-events-none select-none z-0 overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)]">
           <img
             ref={castleRef}
             src="/castle.png"
