@@ -4,6 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
 import ScrollColorManager from "@/components/ScrollColorManager";
+import CursorDitherTrail from "@/components/ui/cursor-dither-trail";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <SmoothScroll>
           <ScrollColorManager />
+          <CursorDitherTrail />
           <CustomCursor />
           {children}
         </SmoothScroll>
