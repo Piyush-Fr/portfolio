@@ -20,14 +20,16 @@ export default function CustomCursor() {
   useGSAP(() => {
     if (!isMounted) return;
     
-    // Set initial centered offset for the pill shape
-    gsap.set(followerPillRef.current, { x: -16, y: -16, width: 32, height: 32 });
+    // Default state is the solid dot alone, so the outline box starts hidden.
+    gsap.set(followerPillRef.current, { x: -16, y: -16, width: 32, height: 32, opacity: 0 });
     gsap.set(dotRef.current, { x: -100, y: -100 });
     gsap.set(followerRef.current, { x: -100, y: -100 });
 
-    // Highly optimized setter functions for mouse position
-    const setDotX = gsap.quickTo(dotRef.current, "x", { duration: 0, ease: "none" });
-    const setDotY = gsap.quickTo(dotRef.current, "y", { duration: 0, ease: "none" });
+    // The dot tracks the pointer with no easing. quickTo builds a tween, and a
+    // zero-duration tween finishes before it ever renders — so the dot stayed
+    // parked off-screen. quickSetter writes the value straight through.
+    const setDotX = gsap.quickSetter(dotRef.current, "x", "px") as (v: number) => void;
+    const setDotY = gsap.quickSetter(dotRef.current, "y", "px") as (v: number) => void;
     
     // Smooth spring-like follower
     const setFollowerX = gsap.quickTo(followerRef.current, "x", { duration: 0.7, ease: "expo.out" });
@@ -80,14 +82,17 @@ export default function CustomCursor() {
     const isPill = cursorMode === "exp" || cursorMode === "tech";
     const isPointer = cursorMode === "pointer";
 
-    const targetWidth = isPill ? 90 : isPointer ? 48 : 32;
-    const targetHeight = isPill ? 34 : isPointer ? 48 : 32;
+    const targetWidth = isPill ? 90 : isPointer ? 56 : 32;
+    const targetHeight = isPill ? 34 : isPointer ? 56 : 32;
 
     gsap.to(followerPillRef.current, {
       width: targetWidth,
       height: targetHeight,
       x: -targetWidth / 2,
       y: -targetHeight / 2,
+      // Default state is the small solid dot alone — the outline box only
+      // appears on hover targets. EXP/TECH pills are unaffected.
+      opacity: cursorMode === "default" ? 0 : 1,
       duration: 0.6,
       ease: "expo.out",
       overwrite: "auto"
@@ -123,8 +128,8 @@ export default function CustomCursor() {
             isPill
               ? "border-2 border-brand-red text-brand-red font-bold"
               : isPointer
-              ? "border-2 border-brand-red text-brand-red"
-              : "border border-brand-red opacity-80"
+              ? "border-2 border-white text-white"
+              : "border border-white"
           }`}
         >
           {cursorText ? <span>{cursorText}</span> : null}
