@@ -15,7 +15,6 @@ body {
   background: var(--dynamic-bg, var(--color-background));
   color: var(--dynamic-fg, var(--color-foreground));
   font-family: var(--font-sans);
-  transition: background-color 0.05s linear, color 0.05s linear;
 }
 
 /* All borders and grid lines respond to the dynamic color */
