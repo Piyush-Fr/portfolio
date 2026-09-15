@@ -16,6 +16,19 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    slug: "aignosis",
+    title: "Aignosis",
+    year: "2026",
+    tags: "UI/UX · Web Design · Front End",
+    type: "WEB DESIGN INTERNSHIP",
+    desc: "Web design internship — designed and built the front end for an AI-based developmental screening platform.",
+    longDesc: "Internship as a Web Designer at Aignosis, a healthtech company building AI-assisted developmental and autism screening. Responsible for the design and front-end build of their public-facing web presence.",
+    challenge: "The product is clinical and technical, but the site has to speak to parents, clinicians and partner organisations at once — communicating credibility without drowning visitors in medical detail.",
+    solution: "Designed and built a responsive front end with a clear typographic hierarchy and a structured narrative, guiding each audience from the problem through to the screening offering and a single clear call to action.",
+    results: "Delivered the live front end at aignosis.in, giving the product a consistent public identity and a clear entry point for enquiries.",
+    link: "https://aignosis.in"
+  },
+  {
     slug: "nihon-urbanization",
     title: "Nihon Urbanization",
     year: "2026",
